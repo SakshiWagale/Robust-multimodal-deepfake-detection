@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERITAS — Multimodal Deepfake Detection System</title>
+    <style>
+        :root {
+            --bg-color: #070c14;
+            --surface-color: #0c1420;
+            --card-bg: #0d1726;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(34, 197, 94, 0.25);
+            --accent-green: #22c55e;
+            --accent-emerald: #10b981;
+            --accent-mint: #34d399;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        html, body {
+            background-color: #070c14 !important;
+            color: #f8fafc !important;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Top Header */
+        header {
+            padding: 1.5rem 3.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: #0f2420;
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--accent-green);
+            box-shadow: 0 0 10px var(--accent-green);
+        }
+
+        .brand-details h1 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .brand-details span {
+            font-size: 0.65rem;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1.8px;
+            color: #6ee7b7;
+        }
+
+        .system-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background: rgba(12, 20, 32, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 9999px;
+            font-size: 0.82rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: #94a3b8;
+        }
+
+        .system-pill-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+
+        /* Hero Section */
+        .hero-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2.5rem 3.5rem 3rem;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 3.5rem;
+            align-items: center;
+        }
+
+        .tagline {
+            font-size: 0.78rem;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #34d399;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .hero-title {
+            font-size: 4.2rem;
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -1.5px;
+            color: #ffffff;
+            margin-bottom: 1.75rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+            max-width: 520px;
+        }
+
+        .btn-upload {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #34d399;
+            color: #04120e;
+            font-size: 1.05rem;
+            font-weight: 700;
+            padding: 0.95rem 1.9rem;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 20px rgba(52, 211, 153, 0.25);
+        }
+
+        .btn-upload:hover {
+            background-color: #10b981;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-upload svg {
+            transition: transform 0.2s ease;
+        }
+
+        .btn-upload:hover svg {
+            transform: translateX(4px);
+        }
+
+        .hero-footnote {
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        /* Right Hero Screen Mockup (Forensic Lab Monitor) */
+        .mockup-card {
+            background: #091321;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 1.25rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            position: relative;
+        }
+
+        .mockup-inner {
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            background: #050b14;
+            height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        /* Waveform Graphic */
+        .cyber-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(34, 197, 94, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34, 197, 94, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .wave-svg {
+            width: 100%;
+            height: 140px;
+            z-index: 2;
+        }
+
+        .mockup-top-tags {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            right: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 5;
+        }
+
+        .layer-tag {
+            background: rgba(8, 18, 28, 0.85);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: #34d399;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .res-tag {
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+        }
+
+        .mockup-bottom-bar {
+            margin-top: 1rem;
+            background: rgba(5, 11, 20, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 8px;
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .dots-row {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot-item {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #1e3a5f;
+        }
+
+        .dot-item.active {
+            background: #34d399;
+            box-shadow: 0 0 6px #34d399;
+        }
+
+        /* 3 Sleek Cards Section */
+        .cards-container {
+            max-width: 1280px;
+            margin: 2rem auto 4rem;
+            padding: 0 3.5rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        .feature-card {
+            background: #091321;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 2.25rem 2rem;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            min-height: 190px;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(34, 197, 94, 0.35);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-stage {
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: #34d399;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+
+        .card-icon {
+            font-size: 1.3rem;
+            line-height: 1;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.2px;
+        }
+
+        .feature-card p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 1.5rem 3.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+            .hero-title {
+                font-size: 3.2rem;
+            }
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            header, .hero-container, .cards-container, footer {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+            .hero-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <a href="/" class="brand-container">
+            <div class="brand-icon">
+                <div class="brand-dot"></div>
+            </div>
+            <div class="brand-details">
+                <h1>VERITAS</h1>
+                <span>MULTIMODAL FORENSICS</span>
+            </div>
+        </a>
+
+        <div class="system-pill">
+            <div class="system-pill-dot"></div>
+            <span>system online</span>
+        </div>
+    </header>
+
+    <!-- Main Hero -->
+    <main class="hero-container">
+        <div class="hero-content">
+            <div class="tagline">ROBUST MULTIMODAL INTELLIGENCE</div>
+            <h2 class="hero-title">
+                Multimodal<br>
+                Deepfake<br>
+                Detection<br>
+                System
+            </h2>
+            <p class="hero-subtitle">
+                AI-Powered Detection Using Visual and Audio Analysis
+            </p>
+            <a href="/upload" class="btn-upload">
+                Upload Media
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </a>
+            <div class="hero-footnote">
+                Prediction generated by trained neural network &bull; 0.50 Decision Threshold
+            </div>
+        </div>
+
+        <!-- Right Side: Forensic Spectral Screen -->
+        <div class="mockup-card">
+            <div class="mockup-inner">
+                <div class="cyber-grid"></div>
+                
+                <div class="mockup-top-tags">
+                    <span class="layer-tag">LAYER 02 &bull; SPECTRAL</span>
+                    <span class="res-tag">1280&times;720</span>
+                </div>
+
+                <!-- Animated Forensic Waveform SVG -->
+                <svg class="wave-svg" viewBox="0 0 500 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 75 Q 30 20, 60 75 T 120 75 T 180 30 T 240 120 T 300 75 T 360 40 T 420 100 T 500 75" stroke="#34d399" stroke-width="2.5" fill="none"/>
+                    <path d="M0 75 Q 40 110, 80 75 T 160 75 T 220 130 T 280 20 T 340 75 T 400 120 T 460 50 T 500 75" stroke="#38bdf8" stroke-width="1.8" stroke-dasharray="4 4" fill="none" opacity="0.6"/>
+                    <circle cx="240" cy="120" r="4" fill="#34d399"/>
+                    <circle cx="280" cy="20" r="4" fill="#38bdf8"/>
+                </svg>
+            </div>
+
+            <div class="mockup-bottom-bar">
+                <div class="dots-row">
+                    <div class="dot-item active"></div>
+                    <div class="dot-item active"></div>
+                    <div class="dot-item active"></div>
+                    <div class="dot-item active"></div>
+                    <div class="dot-item active"></div>
+                </div>
+                <span>audio &bull; 44.1 kHz</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- 3 Sleek Cards at Bottom -->
+    <section class="cards-container">
+        <!-- Card 1 -->
+        <div class="feature-card">
+            <div class="card-top">
+                <span class="card-stage">01 &bull; VISUAL</span>
+                <span class="card-icon">🎥</span>
+            </div>
+            <h3>Video Analysis</h3>
+            <p>Detect visual manipulation in video frames.</p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="feature-card">
+            <div class="card-top">
+                <span class="card-stage">02 &bull; AUDIO</span>
+                <span class="card-icon">🎙️</span>
+            </div>
+            <h3>Audio Analysis</h3>
+            <p>Analyze audio and speech characteristics.</p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="feature-card">
+            <div class="card-top">
+                <span class="card-stage">03 &bull; FUSED</span>
+                <span class="card-icon">🤖</span>
+            </div>
+            <h3>Multimodal AI Detection</h3>
+            <p>Combine visual and audio information for the final prediction.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <span>VERITAS FORENSIC ENGINE</span>
+        <span>MobileNetV2 CNN &bull; Librosa Log-Mel &bull; FastAPI</span>
+    </footer>
+
+</body>
+</html>

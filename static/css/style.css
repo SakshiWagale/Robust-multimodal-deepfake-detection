@@ -1,0 +1,30 @@
+/* ------------------------------------------------------------------
+   style.css
+   Custom styles layered on top of Bootstrap 5.
+   Keep this file for project-specific tweaks only — rely on Bootstrap
+   utility classes wherever possible to keep the CSS footprint small.
+------------------------------------------------------------------ */
+
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+main {
+    flex: 1;
+}
+
+.navbar-brand {
+    letter-spacing: 0.5px;
+}
+
+.card {
+    border: none;
+    border-radius: 0.75rem;
+}
